@@ -13,7 +13,7 @@ const server = Hapi.server({
 	port: process.env.port || "8080",
 	routes: {
 		files: {
-			// keep all filepaths relative to public folder
+			// 	keep all filepaths relative to public folder
 			relativeTo: Path.join(__dirname, "public")
 		}
 	},
@@ -35,8 +35,7 @@ const init = async () => {
 	const makeApiCall = async () => {
 		// make request and return results
 		return await rp({
-			url:
-				"https://api.github.com/repos/vmg/redcarpet/issues?state=closed",
+			url: "https://api.github.com/repos/juliangarnier/anime/pulls",
 			headers: {
 				"User-Agent": "hotel_engine_node_test", // name of repo
 				Accept: "application/vnd.github.v3+json"
@@ -54,23 +53,36 @@ const init = async () => {
 	});
 
 	// define routes
-	server.route({
-		method: "GET",
-		path: "/{param*}", // currently don't pass url params, but defined for future use
-		handler: async function(req, h) {
-			// get cached gitHub request
-			const { value, cached } = await server.methods.requestCache();
-			console.log(
-				`${
-					cached
-						? "last modified on" + new Date(cached.stored)
-						: "freshly cached"
-				}`
-			);
+	server.route([
+		// http routes
+		{
+			method: "GET",
+			path: "/",
+			handler: async function(req, h) {
+				// get cached gitHub request
+				const { value, cached } = await server.methods.requestCache();
+				console.log(
+					`${
+						cached
+							? "last modified on " + new Date(cached.stored)
+							: "freshly cached"
+					}`
+				);
 
-			return h.file("index.html");
+				return h.file("index.html");
+			}
+		},
+		// static files (css, js)
+		{
+			method: "GET",
+			path: "/public/{param*}",
+			handler: {
+				directory: {
+					path: Path.normalize(__dirname + "/public")
+				}
+			}
 		}
-	});
+	]);
 
 	// start hapi server object
 	await server.start();
