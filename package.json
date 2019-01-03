@@ -4,12 +4,19 @@
   "description": "node assessment for Hotel Engine",
   "main": "index.js",
   "dependencies": {
+    "catbox": "^10.0.6",
+    "catbox-mongodb": "^4.2.1",
     "hapi": "^17.8.1",
-    "inert": "^5.1.2"
+    "inert": "^5.1.2",
+    "request": "^2.88.0",
+    "request-promise-native": "^1.0.5"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "nodemon": "^1.18.9"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon ./server.js localhost 8080"
   },
   "repository": {
     "type": "git",
@@ -24,5 +31,10 @@
   "bugs": {
     "url": "https://github.com/blakeface/hotel_engine_node_test/issues"
   },
-  "homepage": "https://github.com/blakeface/hotel_engine_node_test#readme"
+  "homepage": "https://github.com/blakeface/hotel_engine_node_test#readme",
+  "nodemonConfig": {
+    "ignore": [
+      "public/*"
+    ]
+  }
 }
