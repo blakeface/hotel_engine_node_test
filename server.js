@@ -32,25 +32,25 @@ const init = async () => {
 	await server.register(Inert);
 
 	// cache request object
-	const requestCache = server.cache({
-		cache: "mongoCache",
-		expiresIn: 10 * 1000,
-		segment: "gitHubRequest",
-		generateFunc: async id => {
-			// setup request options
-			const options = {
-				url:
-					"https://api.github.com/repos/vmg/redcarpet/issues?state=closed",
-				headers: {
-					"User-Agent": "hotel_engine_node_test", // name of repo
-					Accept: "application/vnd.github.v3+json"
-				}
-			};
+	const makeApiCall = async () => {
+		// make request and return results
+		return await rp({
+			url:
+				"https://api.github.com/repos/vmg/redcarpet/issues?state=closed",
+			headers: {
+				"User-Agent": "hotel_engine_node_test", // name of repo
+				Accept: "application/vnd.github.v3+json"
+			}
+		});
+	};
 
-			// make request and return results
-			return await rp(options);
-		},
-		generateTimeout: 2000
+	server.method("requestCache", makeApiCall, {
+		cache: {
+			cache: "mongoCache",
+			expiresIn: 10 * 1000,
+			generateTimeout: 2000,
+			getDecoratedValue: true
+		}
 	});
 
 	// define routes
@@ -59,8 +59,14 @@ const init = async () => {
 		path: "/{param*}", // currently don't pass url params, but defined for future use
 		handler: async function(req, h) {
 			// get cached gitHub request
-			const data = await requestCache.get();
-			console.log(data);
+			const { value, cached } = await server.methods.requestCache();
+			console.log(
+				`${
+					cached
+						? "last modified on" + new Date(cached.stored)
+						: "freshly cached"
+				}`
+			);
 
 			return h.file("index.html");
 		}
