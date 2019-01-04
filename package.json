@@ -2,31 +2,37 @@
   "name": "hotel_engine_node_test",
   "version": "1.0.0",
   "description": "node assessment for Hotel Engine",
-  "main": "index.js",
+  "private": true,
   "dependencies": {
+    "animejs": "^2.2.0",
     "catbox": "^10.0.6",
     "catbox-mongodb": "^4.2.1",
     "hapi": "^17.8.1",
     "inert": "^5.1.2",
+    "npm": "^6.5.0",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.5"
   },
   "devDependencies": {
-    "anime": "^0.1.2",
-    "nodemon": "^1.18.9"
+    "@babel/core": "^7.2.2",
+    "@babel/preset-env": "^7.2.3",
+    "babel": "^6.23.0",
+    "babel-loader": "^8.0.4",
+    "nodemon": "^1.18.9",
+    "webpack": "^4.28.3",
+    "webpack-cli": "^3.2.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon ./server.js localhost 8080"
+    "start": "nodemon ./server.js localhost 8080",
+    "client": "webpack --mode development --watch",
+    "client-build": "webpack --mode production"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/blakeface/hotel_engine_node_test.git"
   },
-  "keywords": [
-    "node",
-    "hapi"
-  ],
+  "keywords": ["node", "hapi"],
   "author": "Blake Netzeband (blake.netzeband@gmail.com)",
   "license": "ISC",
   "bugs": {
@@ -34,8 +40,6 @@
   },
   "homepage": "https://github.com/blakeface/hotel_engine_node_test#readme",
   "nodemonConfig": {
-    "ignore": [
-      "public/*"
-    ]
+    "ignore": ["public/*"]
   }
 }

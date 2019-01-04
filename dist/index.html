@@ -9,17 +9,22 @@
 
 		<!-- keep things looking nice -->
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css" integrity="sha256-2pUeJf+y0ltRPSbKOeJh09ipQFYxUdct5nTY6GAXswA=" crossorigin="anonymous" type="text/css"/>
-		<link rel="stylesheet" type="text/css" href="/public/styles.css" />
+		<link rel="stylesheet" type="text/css" href="/styles.css" />
 	</head>
 	<body>
         <main>
         	<div class="welcome container">
-        		<h1>Welcome</h1>
-        		<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-  					<rect x="0" y="0" width="100%" height="100%" />
-				</svg>
+        		<h1>Welcome!</h1>
+
+        		<div class="loading-block-wrapper">
+		        	<div class="loading-block"></div>
+		        	<div class="loading-block"></div>
+		        	<div class="loading-block"></div>
+        		</div>
+        		<h2>loading...</h2>
+
         	</div>
         </main>
-        <script src="/public/script.js"></script>
+        <script src="/bundle.js"></script>
     </body>
 </html>

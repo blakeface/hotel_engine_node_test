@@ -1,0 +1,30 @@
+html {
+	font-size: 28px;
+}
+
+.welcome {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	height: 100vh;
+}
+
+.welcome h1 {
+	margin-bottom: 2rem;
+}
+
+.loading-block {
+	width: 0.5rem;
+	height: 0.5rem;
+	background-color: black;
+	margin: 0.25rem;
+}
+
+.loading-block-wrapper {
+	display: flex;
+	flex-direction: column;
+	margin: 0 auto;
+	width: 50vw;
+	max-width: 500px;
+}

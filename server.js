@@ -13,9 +13,12 @@ const server = Hapi.server({
 	port: process.env.port || "8080",
 	routes: {
 		files: {
-			// 	keep all filepaths relative to public folder
-			relativeTo: Path.join(__dirname, "public")
+			// 	keep all filepaths relative to dist folder
+			relativeTo: Path.join(__dirname, "dist")
 		}
+	},
+	debug: {
+		request: ["error"]
 	},
 	cache: [
 		{
@@ -34,6 +37,7 @@ const init = async () => {
 	// cache request object
 	const makeApiCall = async () => {
 		// make request and return results
+		return;
 		return await rp({
 			url: "https://api.github.com/repos/juliangarnier/anime/pulls",
 			headers: {
@@ -75,10 +79,10 @@ const init = async () => {
 		// static files (css, js)
 		{
 			method: "GET",
-			path: "/public/{param*}",
+			path: "/{param*}",
 			handler: {
 				directory: {
-					path: Path.normalize(__dirname + "/public")
+					path: Path.normalize(__dirname + "/dist")
 				}
 			}
 		}
