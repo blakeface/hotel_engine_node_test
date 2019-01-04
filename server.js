@@ -70,8 +70,8 @@ const init = async () => {
 	server.method("requestCache", makeApiCall, {
 		cache: {
 			cache: "mongoCache",
-			expiresIn: 10 * 1000,
-			generateTimeout: 10 * 1000,
+			expiresIn: 1000 * 60 * 60 * 24, // each day
+			generateTimeout: 1000 * 10, // ten seconds
 			getDecoratedValue: true
 		}
 	});
