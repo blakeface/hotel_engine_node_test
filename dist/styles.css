@@ -3,7 +3,7 @@ html {
 }
 
 .hidden {
-	display: none;
+	display: none !important;
 }
 
 .welcome {
@@ -38,4 +38,29 @@ html {
 	margin: 0 auto;
 	width: 50vw;
 	max-width: 500px;
+}
+
+.app h1 {
+	text-align: center;
+	padding: 1rem;
+}
+
+.app-list h5 {
+	font-weight: bold;
+}
+
+.app-list span {
+	color: #ff76bb;
+}
+
+.app-list p {
+	padding-left: 1rem;
+}
+
+.app-list li {
+	padding: 0.5rem 0;
+}
+
+.border-bottom {
+	border-bottom: 1px solid #632e49;
 }

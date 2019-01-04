@@ -39,12 +39,8 @@ const init = async () => {
 		const url = "https://api.github.com/repos/juliangarnier/anime/pulls";
 		let data = [];
 
-		const client_id = "0f51dae017fae2754f7e";
-		const client_secret = "324f6d0388360cf1c298a7e1703685d349ae59ba";
-		const authString = `?client_id=${client_id}&client_secret=${client_secret}`;
-
 		return rp({
-			url: url + authString,
+			url: url,
 			headers: {
 				"User-Agent": "hotel_engine_node_test", // name of repo
 				Accept: "application/vnd.github.v3+json"
@@ -52,22 +48,9 @@ const init = async () => {
 			json: true
 		})
 			.then(results => {
-				// save data for future use
-				data = results.map(pull => ({
-					user: {
-						name: pull.user.login,
-						avatar: pull.user.avatar_url
-					},
-					id: pull.number
-				}));
-
-				return data;
-			})
-			.then(data => {
-				// get information about all pull requests
-				const promises = data.map(pull => {
+				const promises = results.map(pull => {
 					return rp({
-						url: url + "/" + pull.id + authString,
+						url: url + "/" + pull.number,
 						headers: {
 							"User-Agent": "hotel_engine_node_test", // name of repo
 							Accept: "application/vnd.github.v3+json"
@@ -77,11 +60,11 @@ const init = async () => {
 
 				return Promise.all(promises);
 			})
-			.then(results => ({
-				users: data,
-				pulls: results
-			}))
-			.catch(err => console.log(err));
+			.then(results => results)
+			.catch(err => {
+				console.log(err);
+				return err;
+			});
 	};
 
 	server.method("requestCache", makeApiCall, {
@@ -101,6 +84,7 @@ const init = async () => {
 			path: "/",
 			handler: (req, h) => h.file("index.html")
 		},
+		// api endpoints
 		{
 			method: "GET",
 			path: "/api/data",
