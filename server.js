@@ -1,13 +1,17 @@
 "use strict";
 
+// modules
 const Hapi = require("hapi");
 const Inert = require("inert");
 const Path = require("path");
 const request = require("request");
 const rp = require("request-promise");
 const catboxMongodb = require("catbox-mongodb");
+const fs = require("fs");
 
-const pathToLogs = path.join(__dirname + "logs");
+// helper variables
+const pathToLogs = Path.join(__dirname, "logs");
+const isDevMode = process.env.mode === "development";
 
 // create hapi server object
 const server = Hapi.server({
@@ -18,9 +22,6 @@ const server = Hapi.server({
 			// 	keep all filepaths relative to dist folder
 			relativeTo: Path.join(__dirname, "dist")
 		}
-	},
-	debug: {
-		request: ["error"]
 	},
 	cache: [
 		{
@@ -132,7 +133,7 @@ const handleError = err => {
 	});
 
 	// log in dev mode
-	if (process.env.mode === "development") {
+	if (isDevMode) {
 		console.log(message, err);
 	}
 };
@@ -145,10 +146,9 @@ const handleWarning = warning => {
 	});
 
 	// log in dev mode
-	if (process.env.mode === "development") {
+	if (isDevMode) {
 		console.log(message, warning.stack);
 	}
-	``;
 };
 const handleLog = msg => {
 	const message = `${new Date()} --- Success: \n ${msg} \n`;
