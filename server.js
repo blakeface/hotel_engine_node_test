@@ -102,7 +102,7 @@ const init = async () => {
 				console.log(
 					`${
 						cached
-							? "last modified on " + new Date(cached.stored)
+							? "retrieved cache from " + new Date(cached.stored)
 							: "freshly cached"
 					}`
 				);

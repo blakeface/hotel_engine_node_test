@@ -30,7 +30,7 @@ module.exports = {
 		path: `${__dirname}/dist/`,
 		filename: "bundle.js"
 	},
-	plugin: [
+	plugins: [
 		new webpack.ProvidePlugin({
 			$: "jquery",
 			jQuery: "jquery"
