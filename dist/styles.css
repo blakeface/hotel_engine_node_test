@@ -2,6 +2,10 @@ html {
 	font-size: 28px;
 }
 
+.hidden {
+	display: none;
+}
+
 .welcome {
 	display: flex;
 	justify-content: center;
@@ -17,8 +21,15 @@ html {
 .loading-block {
 	width: 0.5rem;
 	height: 0.5rem;
-	background-color: black;
-	margin: 0.25rem;
+}
+.loading-block.first {
+	background-color: #ff76bb;
+}
+.loading-block.second {
+	background-color: #632e49;
+}
+.loading-block.third {
+	background-color: #000000;
 }
 
 .loading-block-wrapper {
