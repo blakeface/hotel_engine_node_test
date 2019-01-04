@@ -7,6 +7,8 @@ const request = require("request");
 const rp = require("request-promise");
 const catboxMongodb = require("catbox-mongodb");
 
+const pathToLogs = path.join(__dirname + "logs");
+
 // create hapi server object
 const server = Hapi.server({
 	host: process.env.host || "localhost",
@@ -48,6 +50,8 @@ const init = async () => {
 			json: true
 		})
 			.then(results => {
+				handleLog(`call to ${url}`);
+
 				const promises = results.map(pull => {
 					return rp({
 						url: url + "/" + pull.number,
@@ -60,9 +64,12 @@ const init = async () => {
 
 				return Promise.all(promises);
 			})
-			.then(results => results)
+			.then(results => {
+				handleLog(`finished promise chain`);
+				return results;
+			})
 			.catch(err => {
-				console.log(err);
+				handleError(err);
 				return err;
 			});
 	};
@@ -117,6 +124,48 @@ const init = async () => {
 	await server.start();
 };
 
+// loggers
+const handleError = err => {
+	const message = `${new Date()} --- Error: \n${err.message} \n`;
+	fs.writeFileSync(pathToLogs + "/errors.log", message, {
+		flag: "a+"
+	});
+
+	// log in dev mode
+	if (process.env.mode === "development") {
+		console.log(message, err);
+	}
+};
+const handleWarning = warning => {
+	const message = `${new Date()} --- Warning: ${warning.name} \n${
+		warning.message
+	}\n`;
+	fs.writeFileSync(pathToLogs + "/errors.log", message, {
+		flag: "a+"
+	});
+
+	// log in dev mode
+	if (process.env.mode === "development") {
+		console.log(message, warning.stack);
+	}
+	``;
+};
+const handleLog = msg => {
+	const message = `${new Date()} --- Success: \n ${msg} \n`;
+	fs.writeFileSync(pathToLogs + "/api.log", message, {
+		flag: "a+"
+	});
+};
+
+// register event handler for errors and warnings
+process.on("unhandledRejection", err => {
+	handleError(err);
+	process.exit(1);
+});
+process.on("warning", warning => {
+	handleWarning(warning);
+});
+
 // Redirect all routes to index
 server.ext("onPreResponse", (req, h) => {
 	const { response } = req;
@@ -125,19 +174,6 @@ server.ext("onPreResponse", (req, h) => {
 		return h.file("index.html");
 	}
 	return h.continue;
-});
-
-// event handler for errors and warning
-process.on("unhandledRejection", err => {
-	console.log("Error:\n", `${err.message}\n`, err);
-	process.exit(1);
-});
-process.on("warning", warning => {
-	console.log(
-		`Warning: ${warning.name}\n`,
-		`${warning.message}\n`,
-		warning.stack
-	);
 });
 
 // FIRE IT UP!
